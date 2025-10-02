@@ -43,6 +43,14 @@ const App: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [currentStep, setCurrentStep] = useState<'config' | 'structure' | 'generation' | 'approval'>('config');
   
+  // Função para scroll suave ao topo
+  const scrollToTop = () => {
+    window.scrollTo({ 
+      top: 0, 
+      behavior: 'smooth' 
+    });
+  };
+
   // Log de mudanças de estado
   React.useEffect(() => {
     console.log('🔄 [STATE] Current step mudou para:', currentStep);
@@ -159,15 +167,17 @@ const App: React.FC = () => {
       setCurrentSection('');
       setCurrentVariations([]);
       
-      // Gerar a próxima seção automaticamente
-      setTimeout(() => {
-        console.log('🔄 [APPROVE] Gerando próxima seção:', nextSection.nome);
-        handleGenerateSection(nextSection.nome);
-      }, 100);
+        // Gerar a próxima seção automaticamente
+        setTimeout(() => {
+          console.log('🔄 [APPROVE] Gerando próxima seção:', nextSection.nome);
+          scrollToTop(); // Scroll suave ao topo
+          handleGenerateSection(nextSection.nome);
+        }, 100);
     } else {
       console.log('🏁 [APPROVE] Todas as seções aprovadas - mostrando resultados finais');
       setCurrentStep('config');
       setShowResults(true);
+      scrollToTop(); // Scroll suave ao topo para mostrar resultados
     }
   };
 
@@ -189,6 +199,7 @@ const App: React.FC = () => {
       
       const refinedVariations = await refineCopyWithFeedback(request, sectionName, feedback, variation);
       setCurrentVariations(refinedVariations);
+      scrollToTop(); // Scroll suave ao topo
       
     } catch (error) {
       console.error('Erro ao refinar copy:', error);
@@ -211,6 +222,9 @@ const App: React.FC = () => {
     console.log('🔄 [START] Resetando seções aprovadas');
     setCurrentStep('generation');
     setApprovedSections(new Map());
+    
+    // Scroll suave ao topo
+    scrollToTop();
     
     // Começar com a primeira seção
     const firstSection = landingConfig.secoes[0];
@@ -307,7 +321,10 @@ const App: React.FC = () => {
               
               <div className="mt-8 text-center">
                 <button
-                  onClick={() => setCurrentStep('config')}
+                  onClick={() => {
+                    setCurrentStep('config');
+                    scrollToTop(); // Scroll suave ao topo
+                  }}
                   className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors mr-4"
                 >
                   Voltar
@@ -396,6 +413,7 @@ const App: React.FC = () => {
                   onClick={() => {
                     console.log('🔄 [REGENERATE] Gerando novas variações para:', currentSection);
                     setCurrentStep('generation');
+                    scrollToTop(); // Scroll suave ao topo
                     handleGenerateSection(currentSection);
                   }}
                   className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
@@ -430,6 +448,7 @@ const App: React.FC = () => {
                     setCurrentStep('config');
                     setShowResults(false);
                     setApprovedSections(new Map());
+                    scrollToTop(); // Scroll suave ao topo
                   }}
                   className="px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white font-bold rounded-2xl hover:from-teal-600 hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >

@@ -15,7 +15,7 @@ const Header: React.FC = () => {
                       {/* Logo */}
                       <div className="flex items-center space-x-3 animate-fade-in-left">
                         <img 
-                          src="/logo2.png" 
+                          src="./logo2.png" 
                           alt="Attena Logo" 
                           className="w-auto h-12 hover:scale-105 transition-transform duration-300 logo-transparent"
                         />
