@@ -51,6 +51,25 @@ const App: React.FC = () => {
     });
   };
 
+  // Função para scroll suave aos resultados inteligentes
+  const scrollToResults = () => {
+    setTimeout(() => {
+      const resultsElement = document.getElementById('results-panel');
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // Fallback: scroll para o final da página onde ficam os resultados
+        window.scrollTo({ 
+          top: document.body.scrollHeight, 
+          behavior: 'smooth' 
+        });
+      }
+    }, 300); // Pequeno delay para garantir que o DOM foi atualizado
+  };
+
   // Log de mudanças de estado
   React.useEffect(() => {
     console.log('🔄 [STATE] Current step mudou para:', currentStep);
@@ -177,7 +196,7 @@ const App: React.FC = () => {
       console.log('🏁 [APPROVE] Todas as seções aprovadas - mostrando resultados finais');
       setCurrentStep('config');
       setShowResults(true);
-      scrollToTop(); // Scroll suave ao topo para mostrar resultados
+      scrollToResults(); // Scroll suave aos resultados inteligentes
     }
   };
 
@@ -223,7 +242,7 @@ const App: React.FC = () => {
     setCurrentStep('generation');
     setApprovedSections(new Map());
     
-    // Scroll suave ao topo
+    // Scroll suave ao topo para visualizar os campos das seções
     scrollToTop();
     
     // Começar com a primeira seção
@@ -432,6 +451,7 @@ const App: React.FC = () => {
           }`}>
             <div className="max-w-6xl mx-auto">
               <ResultsPanel
+                id="results-panel"
                 results={Array.from(approvedSections.entries()).map(([sectionName, section]) => ({
                   id: sectionName,
                   content: `${section.headline}\n\n${section.subheadline}\n\n${section.mainText}${section.bulletPoints ? '\n\n' + section.bulletPoints.join('\n') : ''}${section.cards ? '\n\n' + section.cards.map(card => `${card.title}: ${card.text}`).join('\n') : ''}`,

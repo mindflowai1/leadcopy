@@ -5,6 +5,7 @@ import HistoryPanel from '../ui/HistoryPanel';
 import { Copy, Edit3, Clock, Star, Brain, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ResultsPanelProps {
+  id?: string;
   results: CopyResult[];
   isLoading: boolean;
   history: CopyResult[];
@@ -13,6 +14,7 @@ interface ResultsPanelProps {
 }
 
 const ResultsPanel: React.FC<ResultsPanelProps> = ({
+  id,
   results,
   isLoading,
   history,
@@ -48,7 +50,7 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({
   };
 
   return (
-    <div className={`space-y-8 ${className}`}>
+    <div id={id} className={`space-y-8 ${className}`}>
       {/* Resultados Principais - Tema Athena */}
       <div className="relative overflow-hidden">
         {/* Background Athena */}
